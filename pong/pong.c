@@ -10,6 +10,7 @@
 */
 
 #include <stdio.h>
+#include <math.h>
 
 #include <allegro5/allegro_primitives.h>
 
@@ -241,5 +242,62 @@ void render_pong(struct Pong* pong, struct Fonts* fonts)
         sprintf(winner_message, "Player %d won!", pong->winning_player);
         al_draw_text(fonts->large_font, al_map_rgb(255, 255, 255), TABLE_WIDTH / 2, TABLE_HEIGHT / 3, ALLEGRO_ALIGN_CENTER, winner_message);
         al_draw_text(fonts->large_font, al_map_rgb(255, 255, 255), TABLE_WIDTH / 2, TABLE_HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Press enter to restart");
+    }
+}
+
+int BALL_DIR_LEFT = -1;
+int BALL_DIR_RIGHT = 1;
+
+void update_pong_paddle_ia(struct Paddle *paddle, struct Hitbox *ball_hitbox, struct Ball *ball, float dt)
+{
+    // If ball is getting away, simply follow it
+    if (fabsf(ball->x + ball->vx * dt - paddle->x) > fabsf(ball->x - paddle->x))
+    {
+        if (ball_hitbox->y2 < paddle->y + paddle->height / 2)
+        {
+            paddle->vy = -PADDLE_SPEED;
+        }
+        else if (ball_hitbox->y1 > paddle->y + paddle->height / 2)
+        {
+            paddle->vy = PADDLE_SPEED;
+        }
+        else
+        {
+            paddle->vy = 0;
+        }
+    }
+    else // When it's getting closer, estimate it's position
+    {
+
+        int ball_dir = ball->vx / fabsf(ball->vx); // 1 -> right / -1 -> left
+
+        float hit_x = paddle->x;
+        // the ball will hit on the paddle right side
+        if (ball_dir == BALL_DIR_LEFT)
+        {
+            hit_x += paddle->width;
+        }
+        // The ball will hit on the paddle left side
+        if (ball_dir == BALL_DIR_RIGHT)
+        {
+            hit_x -= ball->width;
+        }
+
+        float ax = fabsf(hit_x - ball->x);
+
+        float estimated_y = ball->y + fabsf(ax / ball->vx) * ball->vy;
+
+        if (estimated_y + ball->height < paddle->y + paddle->height / 2)
+        {
+            paddle->vy = -PADDLE_SPEED;
+        }
+        else if (estimated_y > paddle->y + paddle->height / 2)
+        {
+            paddle->vy = PADDLE_SPEED;
+        }
+        else
+        {
+            paddle->vy = 0;
+        }
     }
 }

@@ -45,3 +45,4 @@ void update_pong(struct Pong* pong, double dt);
 
 void render_pong(struct Pong* pong, struct Fonts* fonts);
 
+void update_pong_paddle_ia(struct Paddle *paddle, struct Hitbox *ball_hitbox, struct Ball *ball, float dt);
