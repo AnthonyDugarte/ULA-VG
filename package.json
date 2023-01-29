@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "postinstall": "git config core.hooksPath .git-hooks"
+  },
+  "devDependencies": {
+    "git-conventional-commits": "^2.5.0"
+  }
+}
