@@ -26,7 +26,7 @@
 #define PADDLE_HEIGHT 20
 #define PADDLE_X_OFFSET 10
 #define PADDLE_Y_OFFSET 30
-#define PADDLE_SPEED 200
+#define PADDLE_SPEED 100
 #define BALL_SIZE 4
 #define MID_LINE_WIDTH 2
 #define FPS 60.0
