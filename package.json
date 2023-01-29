@@ -2,11 +2,10 @@
   "version": "0.2.0",
   "license": "UNLICENSED",
   "scripts": {
-    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "release": "standard-version",
     "postinstall": "git config core.hooksPath .git-hooks"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "^2.2.2",
     "standard-version": "^9.5.0"
   }
 }
