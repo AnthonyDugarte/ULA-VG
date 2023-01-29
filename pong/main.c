@@ -86,7 +86,7 @@ int main()
             // All of the following draws will be on render_surface
             al_set_target_bitmap(render_surface);
             al_clear_to_color(al_map_rgb(0, 0, 0));
-            render_pong(pong, fonts);
+            render_pong(&pong, &fonts);
 
             // Set the display bitmap as current to render
             al_set_target_bitmap(al_get_backbuffer(display));
