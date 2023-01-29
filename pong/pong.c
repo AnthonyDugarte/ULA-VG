@@ -209,6 +209,16 @@ void update_pong(struct Pong* pong, double dt)
                 pong->ball.vy = rand() % 140 + 10;
             }
         }
+
+        if (pong->player1.is_ai_driven)
+        {
+            update_pong_paddle_ia(&pong->player1, &ball_hitbox, &pong->ball, dt);
+        }
+
+        if (pong->player2.is_ai_driven)
+        {
+            update_pong_paddle_ia(&pong->player2, &ball_hitbox, &pong->ball, dt);
+        }
     }
 }
 
