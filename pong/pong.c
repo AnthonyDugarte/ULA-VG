@@ -59,30 +59,36 @@ void handle_input_pong(struct Pong* pong, ALLEGRO_KEYBOARD_STATE* state)
     }
     else if (pong->state == PLAY)
     {
-        if (al_key_down(state, ALLEGRO_KEY_S))
+        if (!pong->player1.is_ai_driven)
         {
-            pong->player1.vy = PADDLE_SPEED;
-        }
-        else if (al_key_down(state, ALLEGRO_KEY_W))
-        {
-            pong->player1.vy = -PADDLE_SPEED;
-        }
-        else
-        {
-            pong->player1.vy = 0;
+            if (al_key_down(state, ALLEGRO_KEY_S))
+            {
+                pong->player1.vy = PADDLE_SPEED;
+            }
+            else if (al_key_down(state, ALLEGRO_KEY_W))
+            {
+                pong->player1.vy = -PADDLE_SPEED;
+            }
+            else
+            {
+                pong->player1.vy = 0;
+            }
         }
 
-        if (al_key_down(state, ALLEGRO_KEY_DOWN))
+        if (!pong->player2.is_ai_driven)
         {
-            pong->player2.vy = PADDLE_SPEED;
-        }
-        else if (al_key_down(state, ALLEGRO_KEY_UP))
-        {
-            pong->player2.vy = -PADDLE_SPEED;
-        }
-        else
-        {
-            pong->player2.vy = 0;
+            if (al_key_down(state, ALLEGRO_KEY_DOWN))
+            {
+                pong->player2.vy = PADDLE_SPEED;
+            }
+            else if (al_key_down(state, ALLEGRO_KEY_UP))
+            {
+                pong->player2.vy = -PADDLE_SPEED;
+            }
+            else
+            {
+                pong->player2.vy = 0;
+            }
         }
     }
     else
