@@ -53,7 +53,9 @@ int main()
     al_start_timer(timer);
 
     struct Pong pong;
-    init_pong(&pong, &sounds);
+    bool player1_use_ia = true;
+    bool player2_use_ia = false;
+    init_pong(&pong, &sounds, player1_use_ia, player2_use_ia);
 
     float last_frame_time = al_get_time();
 

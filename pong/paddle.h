@@ -20,9 +20,11 @@ struct Paddle
     float width;
     float height;
     float vy;
+
+    bool is_ai_driven;
 };
 
-void init_paddle(struct Paddle* paddle, float x, float y, float w, float h);
+void init_paddle(struct Paddle *paddle, float x, float y, float w, float h, bool is_ai_driven);
 
 void build_paddle_hitbox(struct Paddle paddle, struct Hitbox* hitbox);
 

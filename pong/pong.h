@@ -37,7 +37,7 @@ struct Pong
     struct Sounds* sounds;
 };
 
-void init_pong(struct Pong* pong, struct Sounds* sounds);
+void init_pong(struct Pong *pong, struct Sounds *sounds, bool player1_use_ia, bool player2_use_ia);
 
 void handle_input_pong(struct Pong* pong, ALLEGRO_KEYBOARD_STATE* state);
 

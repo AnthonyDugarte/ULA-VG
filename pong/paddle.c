@@ -14,13 +14,14 @@
 #include "settings.h"
 #include "paddle.h"
 
-void init_paddle(struct Paddle* paddle, float x, float y, float w, float h)
+void init_paddle(struct Paddle* paddle, float x, float y, float w, float h, bool is_ai_driven)
 {
     paddle->x = x;
     paddle->y = y;
     paddle->width = w;
     paddle->height = h;
     paddle->vy = 0;
+    paddle->is_ai_driven = is_ai_driven;
 }
 
 void build_paddle_hitbox(struct Paddle paddle, struct Hitbox* hitbox)
