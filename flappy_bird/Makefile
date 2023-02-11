@@ -1,12 +1,12 @@
 CXX = clang++ -std=c++17
 
-INCLUDE = -I.
+INCLUDE = -I. -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
 
 BUILD_DIR = build
 
 OBJ_RULES = text_utilities.o Settings.o Game.o Bird.o Log.o LogPair.o World.o StateMachine.o TitleScreenState.o CountDownState.o PlayingState.o
 
-LIBS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system $(BUILD_DIR)/*.o
+LIBS = -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system $(BUILD_DIR)/*.o
 
 main: $(BUILD_DIR) $(OBJ_RULES) main.cpp
 	$(CXX) $(INCLUDE) $@.cpp -o $@ $(LIBS)
