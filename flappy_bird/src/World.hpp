@@ -37,6 +37,9 @@ public:
     void update(float dt) noexcept;
 
     void render(sf::RenderTarget& target) const noexcept;
+
+
+    int stored_score{0};
 private:
     bool generate_logs;
 
