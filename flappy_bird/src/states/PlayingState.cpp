@@ -46,6 +46,13 @@ void PlayingState::handle_inputs(const sf::Event& event) noexcept
     {
         bird->jump();
     }
+
+    if (event.type == sf::Event::KeyPressed &&
+        event.key.code == sf::Keyboard::P)
+    {
+        state_machine->change_state("pause", world, bird);
+    }
+
 }
 
 void PlayingState::update(float dt) noexcept
