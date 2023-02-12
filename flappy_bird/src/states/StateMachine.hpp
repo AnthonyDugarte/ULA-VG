@@ -16,6 +16,7 @@
 #include <unordered_map>
 
 #include <src/states/BaseState.hpp>
+#include <src/game_modes/GameHardMode.hpp>
 
 class StateMachine
 {
@@ -31,6 +32,9 @@ public:
     void update(float dt) noexcept;
 
     void render(sf::RenderTarget& target) const noexcept;
+
+    std::shared_ptr<GameModeBase> current_game_mode{
+        std::make_shared<GameHardMode>()};
 
 private:
     std::unordered_map<std::string, StateBuilder> states;
