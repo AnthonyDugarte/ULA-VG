@@ -34,7 +34,7 @@ int main()
             {
                 game.get_window().close();
             }
-            else if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::KeyPressed)
+            else if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased)
             {
                 game.handle_inputs(event);
             }
