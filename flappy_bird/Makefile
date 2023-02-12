@@ -1,10 +1,10 @@
 CXX = clang++ -std=c++17
 
-INCLUDE = -I. -I/opt/homebrew/Cellar/sfml/2.5.1_2/include # -g
+INCLUDE = -I. -I/opt/homebrew/Cellar/sfml/2.5.1_2/include  -g
 
 BUILD_DIR = build
 
-OBJ_RULES = text_utilities.o Settings.o Game.o Bird.o Log.o LogPair.o World.o StateMachine.o TitleScreenState.o CountDownState.o PlayingState.o PauseState.o
+OBJ_RULES = text_utilities.o Settings.o Game.o Bird.o Log.o LogPair.o World.o StateMachine.o TitleScreenState.o CountDownState.o PlayingState.o PauseState.o GameNormalMode.o GameHardMode.o
 
 LIBS = -L/opt/homebrew/Cellar/sfml/2.5.1_2/lib -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system $(BUILD_DIR)/*.o
 
@@ -47,6 +47,11 @@ PlayingState.o: $(BUILD_DIR) src/states/PlayingState.hpp src/states/PlayingState
 PauseState.o: $(BUILD_DIR) src/states/PauseState.hpp src/states/PauseState.cpp
 	$(CXX) -c $(INCLUDE) src/states/PauseState.cpp -o $(BUILD_DIR)/$@
 
+GameNormalMode.o: $(BUILD_DIR) src/game_modes/GameNormalMode.hpp src/game_modes/GameNormalMode.cpp
+	$(CXX) -c $(INCLUDE) src/game_modes/GameNormalMode.cpp -o $(BUILD_DIR)/$@
+
+GameHardMode.o: $(BUILD_DIR) src/game_modes/GameHardMode.hpp src/game_modes/GameHardMode.cpp
+	$(CXX) -c $(INCLUDE) src/game_modes/GameHardMode.cpp -o $(BUILD_DIR)/$@
 
 $(BUILD_DIR):
 	mkdir -p $@
