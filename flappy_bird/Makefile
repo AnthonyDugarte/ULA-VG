@@ -1,6 +1,6 @@
 CXX = clang++ -std=c++17
 
-INCLUDE = -I. -I/opt/homebrew/Cellar/sfml/2.5.1_2/include
+INCLUDE = -I. -I/opt/homebrew/Cellar/sfml/2.5.1_2/include # -g
 
 BUILD_DIR = build
 

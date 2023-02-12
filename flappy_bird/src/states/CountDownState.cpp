@@ -35,7 +35,13 @@ void CountDownState::update(float dt) noexcept
 
         if (counter == 0)
         {
+            world->update(dt);
             state_machine->change_state("playing", world);
+            // since change_state removes the reference to current_state
+            // shared_ptr counter goes to -> 0
+            // Add cleans up the state
+            // So, we need to first udpate the world, and then change state
+            return;
         }
     }
 
