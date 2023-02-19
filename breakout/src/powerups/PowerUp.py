@@ -32,7 +32,7 @@ class PowerUp:
     def collides(self, obj: Any) -> bool:
         return self.get_collision_rect().colliderect(obj.get_collision_rect())
 
-    def update(self, dt: float) -> None:
+    def update(self, dt: float, play_state: TypeVar("PlayState")) -> None:
         if self.y > settings.VIRTUAL_HEIGHT:
             self.in_play = False
 
