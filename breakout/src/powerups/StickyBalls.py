@@ -53,6 +53,11 @@ class StickyBalls(PowerUp):
             ball.sticked_to_paddle = False
             ball.assign_rand_velocity()
 
+    def handle_input(self, input_id: str, play_state: TypeVar("PlayState")) -> None:
+        if input_id == "fire":
+            for ball in play_state.balls:
+                self.free_ball(ball)
+
     def render(self, surface: pygame.Surface) -> None:
         if not self.taken:
             super().render(surface)
