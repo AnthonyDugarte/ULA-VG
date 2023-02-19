@@ -29,6 +29,8 @@ class Ball:
         self.texture = settings.TEXTURES["spritesheet"]
         self.frame = random.randint(0, 6)
         self.in_play = True
+        self.sticked_to_paddle = False
+        self.paddled_in_update = False
 
     def get_collision_rect(self) -> pygame.Rect:
         return pygame.Rect(self.x, self.y, self.width, self.height)
