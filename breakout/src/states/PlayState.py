@@ -19,6 +19,7 @@ from gale.text import render_text
 import settings
 import src.powerups
 
+
 class PlayState(BaseState):
     def enter(self, **params: dict):
         self.level = params["level"]
@@ -36,8 +37,7 @@ class PlayState(BaseState):
         self.powerups = params.get("powerups", [])
 
         if not params.get("resume", False):
-            self.balls[0].vx = random.randint(-80, 80)
-            self.balls[0].vy = random.randint(-170, -100)
+            self.balls[0].assign_rand_velocity()
             settings.SOUNDS["paddle_hit"].play()
 
         self.powerups_abstract_factory = AbstractFactory("src.powerups")

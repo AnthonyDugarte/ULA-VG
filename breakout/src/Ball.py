@@ -125,3 +125,7 @@ class Ball:
             self.vx = -50 - 8 * d
         elif d < 0 and paddle.vx > 0 and pr.right < settings.VIRTUAL_HEIGHT:
             self.vx = 50 - 8 * d
+
+    def assign_rand_velocity(self) -> None:
+        self.vx = random.randint(-80, 80)
+        self.vy = random.randint(-170, -100)

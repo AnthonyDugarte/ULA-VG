@@ -34,8 +34,7 @@ class TwoMoreBall(PowerUp):
             settings.SOUNDS["paddle_hit"].stop()
             settings.SOUNDS["paddle_hit"].play()
 
-            b.vx = random.randint(-80, 80)
-            b.vy = random.randint(-170, -100)
+            b.assign_rand_velocity()
             play_state.balls.append(b)
 
         self.in_play = False
