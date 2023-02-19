@@ -38,6 +38,9 @@ class PowerUp:
 
         self.y += self.vy * dt
 
+    def handle_input(self, input_id: str, play_state: TypeVar("PlayState")) -> None:
+        pass
+
     def render(self, surface: pygame.Surface) -> None:
         surface.blit(
             settings.TEXTURES["spritesheet"],

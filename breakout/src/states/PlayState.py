@@ -199,6 +199,8 @@ class PlayState(BaseState):
             powerup.render(surface)
 
     def on_input(self, input_id: str, input_data: InputData) -> None:
+        for powerup in self.powerups:
+            powerup.handle_input(input_id, self)
         if input_id == "move_left":
             if input_data.pressed:
                 self.paddle.vx = -settings.PADDLE_SPEED
