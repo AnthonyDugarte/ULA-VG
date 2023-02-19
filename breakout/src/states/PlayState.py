@@ -15,6 +15,7 @@ from gale.factory import AbstractFactory
 from gale.state_machine import BaseState
 from gale.input_handler import InputHandler, InputData, InputData
 from gale.text import render_text
+from src.powerups.Cannons import Cannons
 from src.powerups.StickyBalls import StickyBalls
 
 import settings
@@ -28,6 +29,7 @@ class PlayState(BaseState):
         self.lives = params["lives"]
         self.paddle = params["paddle"]
         self.balls = params["balls"]
+        self.projectiles = params["projectiles"]
         self.brickset = params["brickset"]
         self.live_factor = params["live_factor"]
         self.points_to_next_live = params["points_to_next_live"]
@@ -111,6 +113,15 @@ class PlayState(BaseState):
                         r.centerx - 8, r.centery - 8
                     )
                 )
+            # elif random.random() < 0.25 and not next(
+            #     (p for p in self.powerups if isinstance(p, Cannons)), None
+            # ):
+            #     r = brick.get_collision_rect()
+            #     self.powerups.append(
+            #         self.powerups_abstract_factory.get_factory("Cannons").create(
+            #             r.centerx - 8, r.centery - 8
+            #         )
+            #     )
 
         # Removing all balls that are not in play
         self.balls = [ball for ball in self.balls if ball.in_play]
@@ -218,6 +229,7 @@ class PlayState(BaseState):
                 score=self.score,
                 lives=self.lives,
                 paddle=self.paddle,
+                projectiles=self.projectiles,
                 balls=self.balls,
                 brickset=self.brickset,
                 points_to_next_live=self.points_to_next_live,

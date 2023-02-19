@@ -28,6 +28,7 @@ class ServeState(BaseState):
         self.brickset = params.get("brickset", create_level(self.level))
         self.score = params.get("score", 0)
         self.lives = params.get("lives", 3)
+        self.projectiles = params.get("projectiles", [])
         self.live_factor = params.get("live_factor", 1)
         self.points_to_next_live = params.get(
             "points_to_next_live", settings.LIVE_POINTS_BASE
@@ -104,6 +105,7 @@ class ServeState(BaseState):
                 paddle=self.paddle,
                 balls=[self.ball],
                 brickset=self.brickset,
+                projectiles=self.projectiles,
                 points_to_next_live=self.points_to_next_live,
                 live_factor=self.live_factor,
             )
