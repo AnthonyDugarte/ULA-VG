@@ -15,6 +15,7 @@ from gale.factory import AbstractFactory
 from gale.state_machine import BaseState
 from gale.input_handler import InputHandler, InputData, InputData
 from gale.text import render_text
+from src.powerups.StickyBalls import StickyBalls
 
 import settings
 import src.powerups
@@ -60,6 +61,9 @@ class PlayState(BaseState):
                 settings.SOUNDS["paddle_hit"].play()
                 ball.rebound(self.paddle)
                 ball.push(self.paddle)
+                ball.paddled_in_update = True
+            else:
+                ball.paddled_in_update = False
 
             # Check collision with brickset
             if not ball.collides(self.brickset):
@@ -97,6 +101,16 @@ class PlayState(BaseState):
                         r.centerx - 8, r.centery - 8
                     )
                 )
+            # Only add the Sticky Balls powerup if there wasn't one before
+            elif random.random() < 0.4 and not next(
+                (p for p in self.powerups if isinstance(p, StickyBalls)), None
+            ):
+                r = brick.get_collision_rect()
+                self.powerups.append(
+                    self.powerups_abstract_factory.get_factory("StickyBalls").create(
+                        r.centerx - 8, r.centery - 8
+                    )
+                )
 
         # Removing all balls that are not in play
         self.balls = [ball for ball in self.balls if ball.in_play]
@@ -122,7 +136,7 @@ class PlayState(BaseState):
 
         # Update powerups
         for powerup in self.powerups:
-            powerup.update(dt)
+            powerup.update(dt, self)
 
             if powerup.collides(self.paddle):
                 powerup.take(self)
