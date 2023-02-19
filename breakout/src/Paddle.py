@@ -31,6 +31,9 @@ class Paddle:
         # The paddle only move horizontally
         self.vx = 0
 
+        # x position change from current update
+        self.update_dx = 0
+
     def resize(self, size: int) -> None:
         self.size = size
         self.width = (self.size + 1) * 32
@@ -45,12 +48,14 @@ class Paddle:
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
     def update(self, dt: float) -> None:
+        old_x = self.x
         next_x = self.x + self.vx * dt
 
         if self.vx < 0:
             self.x = max(0, next_x)
         else:
             self.x = min(settings.VIRTUAL_WIDTH - self.width, next_x)
+        self.update_dx = self.x - old_x
 
     def render(self, surface: pygame.Surface) -> None:
         surface.blit(self.texture, (self.x, self.y), self.frames[self.skin][self.size])
