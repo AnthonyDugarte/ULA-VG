@@ -36,6 +36,34 @@ void Bird::move_x(float _vx) noexcept
   vx = _vx;
 }
 
+void Bird::toggle_move_l(bool is_moving) noexcept
+{
+    moving_left = is_moving;
+    handle_move_toggle();
+}
+void Bird::toggle_move_r(bool is_moving) noexcept
+{
+    moving_right = is_moving;
+    handle_move_toggle();
+}
+
+void Bird::handle_move_toggle() noexcept
+{
+    if (moving_right)
+    {
+        move_x(Settings::JUMP_TAKEOFF_SPEED);
+    }
+    else if (moving_left)
+    {
+
+        move_x(-Settings::JUMP_TAKEOFF_SPEED);
+    }
+    else
+    {
+        move_x(0);
+    }
+}
+
 void Bird::update(float dt) noexcept
 {
     vy += Settings::GRAVITY * dt;

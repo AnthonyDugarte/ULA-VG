@@ -25,6 +25,8 @@ public:
 
     void jump() noexcept;
     void move_x(float vx) noexcept;
+    void toggle_move_l(bool is_moving) noexcept;
+    void toggle_move_r(bool is_moving) noexcept;
 
     void update(float dt) noexcept;
 
@@ -39,4 +41,10 @@ private:
     float vx;
     sf::Sprite sprite;
     bool jumping{false};
+
+
+    bool moving_left{false};
+    bool moving_right{false};
+
+    void handle_move_toggle() noexcept;
 };

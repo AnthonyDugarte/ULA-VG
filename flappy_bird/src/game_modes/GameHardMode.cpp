@@ -11,18 +11,24 @@ void GameHardMode::handle_bird_inputs(const sf::Event &event,
     {
         if (event.key.code == sf::Keyboard::A)
         {
-            bird->move_x(-Settings::JUMP_TAKEOFF_SPEED);
+            bird->toggle_move_l(true);
         }
         else if (event.key.code == sf::Keyboard::D)
         {
-            bird->move_x(Settings::JUMP_TAKEOFF_SPEED);
+            bird->toggle_move_r(true);
         }
     }
 
-    if (event.type == sf::Event::KeyReleased &&
-        (event.key.code == sf::Keyboard::A ||
-         event.key.code == sf::Keyboard::D))
+    if (event.type == sf::Event::KeyReleased)
     {
-        bird->move_x(0);
+        if (event.key.code == sf::Keyboard::A)
+        {
+            bird->toggle_move_l(false);
+        }
+
+        if (event.key.code == sf::Keyboard::D)
+        {
+            bird->toggle_move_r(false);
+        }
     }
 }
