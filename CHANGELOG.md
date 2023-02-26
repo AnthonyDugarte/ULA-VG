@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/AnthonyDugarte/ULA-VG/compare/v0.2.3...v0.2.4) (2023-02-26)
+
+
+### Bug Fixes
+
+* **flappy_bird:** improve x-axis movement logic by storing which side is being pressed and computate the speed taking preference for right side movement ([ea93333](https://github.com/AnthonyDugarte/ULA-VG/commit/ea933333875e2c24c788762a57427a7650843a32))
+
 ### [0.2.3](https://github.com/AnthonyDugarte/ULA-VG/compare/v0.2.1...v0.2.3) (2023-02-19)
 
 
