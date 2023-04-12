@@ -291,7 +291,29 @@ class PlayState(BaseState):
         falling_tiles = self.board.get_falling_tiles()
 
         def finish():
-            self.__calculate_matches([item[0] for item in falling_tiles])
+            if not self.__calculate_matches([item[0] for item in falling_tiles]):
+                # If there are no new matches from falling tiles, check if there are any possible matches
+                if not self.board.are_there_any_possible_matches():
+                    # print("Regenerating world")
+                    self.active = False
+
+                    new_falling_tiles = []
+                    while not self.board.are_there_any_possible_matches():
+                        # print("still on it")
+                        self.board.clean_tiles()
+                        new_falling_tiles = self.board.get_falling_tiles()
+
+                    # print("Finished, re-render tiles and check for new matches recursivelly")
+                    def new_finish():
+                        self.__calculate_matches(
+                            [item[0] for item in new_falling_tiles]
+                        )
+
+                    Timer.tween(
+                        0.25,
+                        new_falling_tiles,
+                        on_finish=new_finish,
+                    )
 
         Timer.tween(
             0.25,

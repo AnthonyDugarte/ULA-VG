@@ -224,6 +224,11 @@ class Board:
 
         self.matches = []
 
+    def clean_tiles(self) -> None:
+        for i in range(settings.BOARD_HEIGHT):
+            for j in range(settings.BOARD_WIDTH):
+                self.tiles[i][j] = None
+
     def get_falling_tiles(self) -> Tuple[Any, Dict[str, Any]]:
         # List of tweens to create
         tweens: Tuple[Tile, Dict[str, Any]] = []
