@@ -68,6 +68,9 @@ class Board:
                     i, j, color, random.randint(0, settings.NUM_VARIETIES - 1)
                 )
 
+        if not self.are_there_any_possible_matches():
+            self.__initialize_tiles()
+
     def __calculate_match_rec(self, tile: Tile) -> Set[Tile]:
         if tile in self.in_stack:
             return []
