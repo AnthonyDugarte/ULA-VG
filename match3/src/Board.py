@@ -15,6 +15,7 @@ import random
 
 import settings
 from src.Tile import Tile
+from gale import input_handler
 
 
 class Board:
@@ -155,6 +156,63 @@ class Board:
         delattr(self, "in_stack")
 
         return self.matches if len(self.matches) > 0 else None
+
+    def swap_tiles(self, i1, j1, i2, j2):
+        tile1 = self.tiles[i1][j1]
+        tile2 = self.tiles[i2][j2]
+
+        (
+            self.tiles[tile1.i][tile1.j],
+            self.tiles[tile2.i][tile2.j],
+        ) = (
+            self.tiles[tile2.i][tile2.j],
+            self.tiles[tile1.i][tile1.j],
+        )
+
+        tile1.i, tile1.j, tile2.i, tile2.j = (
+            tile2.i,
+            tile2.j,
+            tile1.i,
+            tile1.j,
+        )
+
+        return tile1, tile2
+
+    def are_there_any_possible_matches(self) -> bool:
+        old_matches = self.matches
+        self.matches = []
+
+        for row in self.tiles:
+            for tile in row:
+                for di, dj in [
+                    # TODO: Create a more friendly alias
+                    input_handler.MOUSE_MOTION_UP,
+                    input_handler.MOUSE_MOTION_RIGHT,
+                    input_handler.MOUSE_MOTION_DOWN,
+                    input_handler.MOUSE_MOTION_LEFT,
+                ]:
+                    og_i = tile.i
+                    og_j = tile.j
+                    i = tile.i + di
+                    j = tile.j + dj
+                    if 0 <= i < settings.BOARD_HEIGHT and 0 <= j < settings.BOARD_WIDTH:
+                        self.swap_tiles(og_i, og_j, i, j)
+
+                        # TODO: Not sure if performance would really be improved
+                        # but we could store the tuples of already calculated matches
+                        # to avoid recomputing them, though it's not an extremely
+                        # expensive operation
+                        found_a_match = self.calculate_matches_for(
+                            [self.tiles[og_i][og_j], self.tiles[i][j]]
+                        )
+                        self.swap_tiles(og_i, og_j, i, j)
+
+                        if found_a_match:
+                            self.matches = old_matches
+                            return True
+
+        self.matches = []
+        return False
 
     def remove_matches(self) -> None:
         for match in self.matches:
