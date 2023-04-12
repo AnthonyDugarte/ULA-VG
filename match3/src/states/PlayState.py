@@ -21,7 +21,7 @@ import settings
 
 
 class PlayState(BaseState):
-    def enter(self, **enter_params: Dict[str, Any]) -> None:
+    def enter(self, **enter_params: Any) -> None:
         self.level = enter_params["level"]
         self.board = enter_params["board"]
         self.score = enter_params["score"]
@@ -129,69 +129,114 @@ class PlayState(BaseState):
             shadowed=True,
         )
 
+    def swap_tiles(self, i1, j1, i2, j2):
+        tile1 = self.board.tiles[i1][j1]
+        tile2 = self.board.tiles[i2][j2]
+
+        (
+            self.board.tiles[tile1.i][tile1.j],
+            self.board.tiles[tile2.i][tile2.j],
+        ) = (
+            self.board.tiles[tile2.i][tile2.j],
+            self.board.tiles[tile1.i][tile1.j],
+        )
+
+        tile1.i, tile1.j, tile2.i, tile2.j = (
+            tile2.i,
+            tile2.j,
+            tile1.i,
+            tile1.j,
+        )
+
+        return tile1, tile2
+
+    def mark_dragged_tile(self, i, j, dragged=True):
+        self.dragged_tile = dragged
+        self.highlighted_i1 = i
+        self.highlighted_j1 = j
+
+        tile = self.board.tiles[self.highlighted_i1][self.highlighted_j1]
+        tile.dragged = dragged
+
     def on_input(self, input_id: str, input_data: InputData) -> None:
         if not self.active:
             return
 
-        if input_id == "click" and input_data.pressed:
-            pos_x, pos_y = input_data.position
-            pos_x = pos_x * settings.VIRTUAL_WIDTH // settings.WINDOW_WIDTH
-            pos_y = pos_y * settings.VIRTUAL_HEIGHT // settings.WINDOW_HEIGHT
+        if input_id == "click":
+            pos_x, pos_y = get_virtual_position(input_data.position)
+
             i = (pos_y - self.board.y) // settings.TILE_SIZE
             j = (pos_x - self.board.x) // settings.TILE_SIZE
 
             if 0 <= i < settings.BOARD_HEIGHT and 0 <= j <= settings.BOARD_WIDTH:
-                if not self.highlighted_tile:
+                if input_data.pressed:
+                    if self.dragged_tile:
+                        # clean previus highlighted tile, is this really reached?
+                        pass
+
+                    self.mark_dragged_tile(i, j)
+                elif self.dragged_tile:
                     self.highlighted_tile = True
-                    self.highlighted_i1 = i
-                    self.highlighted_j1 = j
-                else:
                     self.highlighted_i2 = i
                     self.highlighted_j2 = j
+
                     di = abs(self.highlighted_i2 - self.highlighted_i1)
                     dj = abs(self.highlighted_j2 - self.highlighted_j1)
 
+                    self.active = False
+                    tile1 = self.board.tiles[self.highlighted_i1][self.highlighted_j1]
+                    tile2 = self.board.tiles[self.highlighted_i2][self.highlighted_j2]
+
                     if di <= 1 and dj <= 1 and di != dj:
-                        self.active = False
-                        tile1 = self.board.tiles[self.highlighted_i1][
-                            self.highlighted_j1
-                        ]
-                        tile2 = self.board.tiles[self.highlighted_i2][
-                            self.highlighted_j2
-                        ]
 
                         def arrive():
-                            tile1 = self.board.tiles[self.highlighted_i1][
-                                self.highlighted_j1
-                            ]
-                            tile2 = self.board.tiles[self.highlighted_i2][
-                                self.highlighted_j2
-                            ]
-                            (
-                                self.board.tiles[tile1.i][tile1.j],
-                                self.board.tiles[tile2.i][tile2.j],
-                            ) = (
-                                self.board.tiles[tile2.i][tile2.j],
-                                self.board.tiles[tile1.i][tile1.j],
+                            tile1, tile2 = self.swap_tiles(
+                                self.highlighted_i1,
+                                self.highlighted_j1,
+                                self.highlighted_i2,
+                                self.highlighted_j2,
                             )
-                            tile1.i, tile1.j, tile2.i, tile2.j = (
-                                tile2.i,
-                                tile2.j,
-                                tile1.i,
-                                tile1.j,
-                            )
+
                             self.__calculate_matches([tile1, tile2])
 
-                        # Swap tiles
                         Timer.tween(
                             0.25,
                             [
-                                (tile1, {"x": tile2.x, "y": tile2.y}),
-                                (tile2, {"x": tile1.x, "y": tile1.y}),
+                                (
+                                    tile1,
+                                    tile2.get_default_pos_timer_obj(),
+                                ),
+                                (
+                                    tile2,
+                                    tile1.get_default_pos_timer_obj(),
+                                ),
                             ],
                             on_finish=arrive,
                         )
 
+                    else:
+                        # clean previus highlighted tile
+
+                        def finish():
+                            self.active = True
+
+                        Timer.tween(
+                            0.2,
+                            [
+                                (
+                                    tile1,
+                                    {
+                                        "x": tile1.j * settings.TILE_SIZE,
+                                        "y": tile1.i * settings.TILE_SIZE,
+                                    },
+                                ),
+                            ],
+                            on_finish=finish,
+                        )
+
+                    self.mark_dragged_tile(
+                        self.highlighted_i1, self.highlighted_j1, False
+                    )
                     self.highlighted_tile = False
 
         if input_id in ["m_up", "m_down", "m_left", "m_right"]:
