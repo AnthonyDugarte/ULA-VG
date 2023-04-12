@@ -85,8 +85,8 @@ class PlayState(BaseState):
         self.board.render(surface)
 
         if self.highlighted_tile:
-            x = self.highlighted_j1 * settings.TILE_SIZE + self.board.x
-            y = self.highlighted_i1 * settings.TILE_SIZE + self.board.y
+            x = self.highlighted_j2 * settings.TILE_SIZE + self.board.x
+            y = self.highlighted_i2 * settings.TILE_SIZE + self.board.y
             surface.blit(self.tile_alpha_surface, (x, y))
 
         surface.blit(self.text_alpha_surface, (16, 16))
