@@ -24,6 +24,19 @@ input_handler.InputHandler.set_keyboard_action(input_handler.KEY_UP, "up")
 input_handler.InputHandler.set_keyboard_action(input_handler.KEY_DOWN, "down")
 input_handler.InputHandler.set_mouse_click_action(input_handler.MOUSE_BUTTON_1, "click")
 
+input_handler.InputHandler.set_mouse_motion_action(
+    input_handler.MOUSE_MOTION_UP, "m_up"
+)
+input_handler.InputHandler.set_mouse_motion_action(
+    input_handler.MOUSE_MOTION_DOWN, "m_down"
+)
+input_handler.InputHandler.set_mouse_motion_action(
+    input_handler.MOUSE_MOTION_LEFT, "m_left"
+)
+input_handler.InputHandler.set_mouse_motion_action(
+    input_handler.MOUSE_MOTION_RIGHT, "m_right"
+)
+
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
