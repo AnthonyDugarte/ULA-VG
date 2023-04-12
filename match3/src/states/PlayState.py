@@ -197,19 +197,28 @@ class PlayState(BaseState):
                                 self.highlighted_j2,
                             )
 
-                            self.__calculate_matches([tile1, tile2])
+                            if not self.__calculate_matches([tile1, tile2]):
+                                self.swap_tiles(
+                                    self.highlighted_i1,
+                                    self.highlighted_j1,
+                                    self.highlighted_i2,
+                                    self.highlighted_j2,
+                                )
+
+                                Timer.tween(
+                                    0.1,
+                                    [
+                                        (tile1, tile1.get_default_pos_timer_obj()),
+                                        (tile2, tile2.get_default_pos_timer_obj()),
+                                    ],
+                                    on_finish=lambda: None,
+                                )
 
                         Timer.tween(
                             0.25,
                             [
-                                (
-                                    tile1,
-                                    tile2.get_default_pos_timer_obj(),
-                                ),
-                                (
-                                    tile2,
-                                    tile1.get_default_pos_timer_obj(),
-                                ),
+                                (tile1, tile2.get_default_pos_timer_obj()),
+                                (tile2, tile1.get_default_pos_timer_obj()),
                             ],
                             on_finish=arrive,
                         )
@@ -246,25 +255,33 @@ class PlayState(BaseState):
             j = (pos_x - self.board.x) // settings.TILE_SIZE
 
             if self.dragged_tile:
-                tile1 = self.board.tiles[self.highlighted_i1][self.highlighted_j1]
-
-                tile1.x = pos_x - self.board.x - settings.TILE_SIZE // 2
-                tile1.y = pos_y - self.board.y - settings.TILE_SIZE // 2
-
-                if 0 <= i < settings.BOARD_HEIGHT and 0 <= j <= settings.BOARD_WIDTH:
-                    if i != self.highlighted_i1 or j != self.highlighted_j1:
-                        self.highlighted_tile = True
-                        self.highlighted_i2 = i
-                        self.highlighted_j2 = j
+                if not input_data.buttons[0]:
+                    self.mark_dragged_tile(
+                        self.highlighted_i1, self.highlighted_j1, False
+                    )
                 else:
-                    self.higihtlighted_tile = False
+                    tile1 = self.board.tiles[self.highlighted_i1][self.highlighted_j1]
 
-    def __calculate_matches(self, tiles: List) -> None:
+                    tile1.x = pos_x - self.board.x - settings.TILE_SIZE // 2
+                    tile1.y = pos_y - self.board.y - settings.TILE_SIZE // 2
+
+                    if (
+                        0 <= i < settings.BOARD_HEIGHT
+                        and 0 <= j <= settings.BOARD_WIDTH
+                    ):
+                        if i != self.highlighted_i1 or j != self.highlighted_j1:
+                            self.highlighted_tile = True
+                            self.highlighted_i2 = i
+                            self.highlighted_j2 = j
+                    else:
+                        self.higihtlighted_tile = False
+
+    def __calculate_matches(self, tiles: List) -> bool:
         matches = self.board.calculate_matches_for(tiles)
 
         if matches is None:
             self.active = True
-            return
+            return False
 
         settings.SOUNDS["match"].stop()
         settings.SOUNDS["match"].play()
@@ -276,10 +293,13 @@ class PlayState(BaseState):
 
         falling_tiles = self.board.get_falling_tiles()
 
+        def finish():
+            self.__calculate_matches([item[0] for item in falling_tiles])
+
         Timer.tween(
             0.25,
             falling_tiles,
-            on_finish=lambda: self.__calculate_matches(
-                [item[0] for item in falling_tiles]
-            ),
+            on_finish=finish,
         )
+
+        return True
