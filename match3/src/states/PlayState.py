@@ -16,6 +16,7 @@ from gale.state_machine import BaseState
 from gale.text import render_text
 from gale.timer import Timer
 
+from src.states.state_utils import get_virtual_position
 import settings
 
 
@@ -31,7 +32,8 @@ class PlayState(BaseState):
         self.board_highlight_i2 = -1
         self.board_highlight_j2 = -1
 
-        self.highlighted_tile = False
+        self.dragged_tile = False  # i1,j1
+        self.highlighted_tile = False  # i2,j2
 
         self.active = True
 
@@ -191,6 +193,26 @@ class PlayState(BaseState):
                         )
 
                     self.highlighted_tile = False
+
+        if input_id in ["m_up", "m_down", "m_left", "m_right"]:
+            pos_x, pos_y = get_virtual_position(input_data.position)
+
+            i = (pos_y - self.board.y) // settings.TILE_SIZE
+            j = (pos_x - self.board.x) // settings.TILE_SIZE
+
+            if self.dragged_tile:
+                tile1 = self.board.tiles[self.highlighted_i1][self.highlighted_j1]
+
+                tile1.x = pos_x - self.board.x - settings.TILE_SIZE // 2
+                tile1.y = pos_y - self.board.y - settings.TILE_SIZE // 2
+
+                if 0 <= i < settings.BOARD_HEIGHT and 0 <= j <= settings.BOARD_WIDTH:
+                    if i != self.highlighted_i1 or j != self.highlighted_j1:
+                        self.highlighted_tile = True
+                        self.highlighted_i2 = i
+                        self.highlighted_j2 = j
+                else:
+                    self.higihtlighted_tile = False
 
     def __calculate_matches(self, tiles: List) -> None:
         matches = self.board.calculate_matches_for(tiles)
