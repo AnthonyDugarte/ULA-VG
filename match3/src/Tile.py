@@ -42,3 +42,10 @@ class Tile:
             (self.x + offset_x, self.y + offset_y),
             settings.FRAMES["tiles"][self.color][self.variety],
         )
+
+    def get_default_pos(self):
+        return (self.j * settings.TILE_SIZE, self.i * settings.TILE_SIZE)
+
+    def get_default_pos_timer_obj(self):
+        x, y = self.get_default_pos()
+        return {"x": x, "y": y}
