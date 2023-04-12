@@ -26,9 +26,17 @@ class Board:
         self.__initialize_tiles()
 
     def render(self, surface: pygame.Surface) -> None:
+        dragged_tile = None
+
         for row in self.tiles:
             for tile in row:
-                tile.render(surface, self.x, self.y)
+                if tile.dragged:
+                    dragged_tile = tile
+                else:
+                    tile.render(surface, self.x, self.y)
+
+        if dragged_tile:
+            dragged_tile.render(surface, self.x, self.y)
 
     def __is_match_generated(self, i: int, j: int, color: int) -> bool:
         if (
