@@ -168,7 +168,7 @@ class PlayState(BaseState):
             i = (pos_y - self.board.y) // settings.TILE_SIZE
             j = (pos_x - self.board.x) // settings.TILE_SIZE
 
-            if 0 <= i < settings.BOARD_HEIGHT and 0 <= j <= settings.BOARD_WIDTH:
+            if 0 <= i < settings.BOARD_HEIGHT and 0 <= j < settings.BOARD_WIDTH:
                 if input_data.pressed:
                     if self.dragged_tile:
                         # clean previus highlighted tile, is this really reached?
@@ -265,10 +265,7 @@ class PlayState(BaseState):
                     tile1.x = pos_x - self.board.x - settings.TILE_SIZE // 2
                     tile1.y = pos_y - self.board.y - settings.TILE_SIZE // 2
 
-                    if (
-                        0 <= i < settings.BOARD_HEIGHT
-                        and 0 <= j <= settings.BOARD_WIDTH
-                    ):
+                    if 0 <= i < settings.BOARD_HEIGHT and 0 <= j < settings.BOARD_WIDTH:
                         if i != self.highlighted_i1 or j != self.highlighted_j1:
                             self.highlighted_tile = True
                             self.highlighted_i2 = i
